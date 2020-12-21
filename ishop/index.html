@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>ishop &lpar;интернет-магазин&rpar;</title>
+  </head>
+  <body>
+    <div id="container"></div>
+
+    <script src="https://unpkg.com/react@15/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
+
+    <script src="ProductsTable.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <script>
+      var shopNameText = 'Интернет-магазин i-shop';
+
+      var productsArr = [
+        {
+          code: 0,
+          name: 'Название',
+          type: 'Тип',
+          price: 'Цена',
+          photoUrl: 'Фотография',
+          productsLeft: 'Осталось',
+        },
+
+        {
+          code: 1,
+          name: 'Xiaomi Redmi Note 9',
+          type: 'Смартфон',
+          price: 250,
+          photoUrl: 'https://5zv.by/image/cache/foto_edit/note9_pro_2-1000x1000.jpg',
+          productsLeft: 47,
+        },
+
+        {
+          code: 2,
+          name: 'Samsung QE65Q950TSU',
+          type: 'Телевизор',
+          price: 7482,
+          photoUrl: 'https://content2.onliner.by/catalog/device/main/d0001f96381cf7f38847776e8d5ee20b.jpeg',
+          productsLeft: 6,
+        },
+
+        {
+          code: 3,
+          name: 'Bosch 06033D1100',
+          type: 'Пылесос',
+          price: 114,
+          photoUrl: 'https://content2.onliner.by/catalog/device/main/098871267007b2882af366ea18d87da3.jpeg',
+          productsLeft: 154,
+        },
+      ];
+
+      ReactDOM.render(
+        React.createElement(ProductsTable, {
+          shopName: shopNameText,
+          products: productsArr,
+        }),
+        document.getElementById('container')
+      );
+    </script>
+  </body>
+</html>
