@@ -12,6 +12,15 @@
     }
   },
 
+  propTypes: {
+    code: React.PropTypes.number.isRequired,
+    name: React.PropTypes.string.isRequired,
+    type: React.PropTypes.string,
+    price: React.PropTypes.any.isRequired,
+    photoUrl: React.PropTypes.string.isRequired,
+    productsLeft: React.PropTypes.any,
+  },
+
   render: function () {
     var productsCode = [];
     var productCode;
