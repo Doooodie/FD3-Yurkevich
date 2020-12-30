@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>filter &lpar;фильтр&rpar;</title>
+  </head>
+  <body>
+    <div id="container"></div>
+
+    <script crossorigin src="https://unpkg.com/react@15/dist/react.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
+
+    <script src="LongWordsList.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <script>
+      var longWordsArr = [
+        'частнопредпринимательский',
+        'переосвидетельствоваться',
+        'субстанционализироваться',
+        'интернационализироваться',
+        'человеконенавистничество',
+        'высокопревосходительство',
+        'одиннадцатиклассница',
+        'делопроизводительница',
+        'неудовлетворительно',
+        'соответственно',
+        'исключительно',
+      ];
+
+      ReactDOM.render(
+        React.createElement(LongWordsList, { longWordsArray: longWordsArr }),
+        document.getElementById('container')
+      );
+    </script>
+  </body>
+</html>
