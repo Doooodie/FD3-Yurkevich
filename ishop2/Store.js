@@ -32,14 +32,23 @@
       headerUrlText: 'URL',
       headerQuantityText: 'Количество',
       headerControlText: 'Контроль',
+
+      selectedProductCode: null,
     }
+  },
+
+  changeSelectedProductCode: function (code) {
+    this.setState({ selectedProductCode: code });
   },
 
   render: function () {
     var tableHeader = [];
     var productsCode = [];
 
-    for (let i = 0; i < Object.keys(this.state).length; i++) {
+    var selectedProductCode = this.state.selectedProductCode;
+    var changeSelectedProductCode = this.changeSelectedProductCode;
+
+    for (let i = 0; i < Object.keys(this.state).length - 1; i++) {
       tableHeader.push(React.DOM.th({ key: i }, Object.values(this.state)[i]));
     }
 
@@ -52,9 +61,11 @@
           price: item.price,
           url: item.url,
           quantity: item.quantity,
+          selectedProductCode: selectedProductCode,
+          changeSelectedProductCode: changeSelectedProductCode,
         })
       );
-    })
+    });
 
     return React.DOM.table(null,
       React.DOM.tbody(null,

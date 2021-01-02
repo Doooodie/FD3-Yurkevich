@@ -7,6 +7,9 @@ var Product = React.createClass({
     price: React.PropTypes.number,
     url: React.PropTypes.string,
     quantity: React.PropTypes.number,
+
+    selectedProductCode: React.PropTypes.number,
+    changeSelectedProductCode: React.PropTypes.func,
   },
 
   getInitialState: function () {
@@ -21,13 +24,15 @@ var Product = React.createClass({
   },
 
   highlightProduct: function () {
-    !this.state.trClass ?
-      this.setState({ trClass: 'selected' }) :
-      this.setState({ trClass: undefined })
+    this.props.changeSelectedProductCode(this.props.code);
   },
 
   render: function () {
-    return React.DOM.tr({ className: this.state.trClass, onClick: this.highlightProduct },
+    var backgroundColor = (this.props.selectedProductCode === this.props.code) ?
+      { backgroundColor: 'aqua' } :
+      undefined;
+
+    return React.DOM.tr({ className: this.state.trClass, style: backgroundColor, onClick: this.highlightProduct },
       React.DOM.td(null, this.props.name),
       React.DOM.td(null, this.props.price),
       React.DOM.td(null, this.props.url),
