@@ -10,17 +10,12 @@ var Product = React.createClass({
 
     selectedProductCode: React.PropTypes.number,
     changeSelectedProductCode: React.PropTypes.func,
+    filterArray: React.PropTypes.func,
   },
 
-  getInitialState: function () {
-    return {
-      trClass: undefined,
-    }
-  },
-
-  deleteProduct: function (event) {
-    event.stopPropagation();
-    this.setState({ trClass: 'hidden' });
+  deleteProduct: function () {
+    this.props.changeSelectedProductCode(this.props.code);
+    this.props.filterArray(this.props.code);
   },
 
   highlightProduct: function () {
@@ -32,7 +27,7 @@ var Product = React.createClass({
       { backgroundColor: 'aqua' } :
       undefined;
 
-    return React.DOM.tr({ className: this.state.trClass, style: backgroundColor, onClick: this.highlightProduct },
+    return React.DOM.tr({ style: backgroundColor, onClick: this.highlightProduct },
       React.DOM.td(null, this.props.name),
       React.DOM.td(null, this.props.price),
       React.DOM.td(null, this.props.url),
