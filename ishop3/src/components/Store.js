@@ -1,8 +1,10 @@
 ﻿import React, { Component } from 'react';
-import Product from './Product.js';
 import '../styles/Store.css';
 
-class Store extends Component {
+import Product from './Product.js';
+import ProductDescription from './ProductDescription.js';
+
+export default class Store extends Component {
   static defaultProps = {
     productsArray: [
       {
@@ -11,23 +13,55 @@ class Store extends Component {
         price: 0,
         url: '',
         quantity: 0,
+        description: '',
       },
     ],
+
+    tableHeader: {
+      headerNameText: '',
+      headerPriceText: '',
+      headerUrlText: '',
+      headerQuantityText: '',
+      headerControlText: '',
+    },
   };
 
   state = {
-    selectedProductCode: undefined,
     productsArray: this.props.productsArray,
+
+    selectedProductCode: undefined,
+    selectedProductName: undefined,
+    selectedProductPrice: undefined,
+    selectedProductUrl: undefined,
+    selectedProductQuantity: undefined,
+    selectedProductDescription: undefined,
+
+    productDescriptionMode: 'hidden', //There are 4 modes: hidden, description, editor, newProductEditor
   };
 
-  changeSelectedProductCode = code => {
-    this.setState({ selectedProductCode: code });
+  changeSelectedProductProperties = (code, name, price, url, quantity, description) => {
+    this.setState({
+      selectedProductCode: code,
+      selectedProductName: name,
+      selectedProductPrice: price,
+      selectedProductUrl: url,
+      selectedProductQuantity: quantity,
+      selectedProductDescription: description,
+    });
   };
 
   filterArray = code => {
     this.setState({
       productsArray: this.state.productsArray.filter(item => item.code !== code),
     });
+  };
+
+  changeMode = mode => {
+    this.setState({ productDescriptionMode: mode });
+  };
+
+  changeModeToCreateNewProduct = () => {
+    this.setState({ productDescriptionMode: 'newProductEditor' });
   };
 
   render() {
@@ -45,21 +79,35 @@ class Store extends Component {
         price={item.price}
         url={item.url}
         quantity={item.quantity}
+        description={item.description}
         selectedProductCode={this.state.selectedProductCode}
-        changeSelectedProductCode={this.changeSelectedProductCode}
+        changeSelectedProductProperties={this.changeSelectedProductProperties}
         filterArray={this.filterArray}
+        changeMode={this.changeMode}
       />
     ));
 
     return (
-      <table>
-        <tbody>
-          <tr>{tableHeader}</tr>
-          {productsCode}
-        </tbody>
-      </table>
+      <>
+        <table>
+          <tbody>
+            <tr>{tableHeader}</tr>
+            {productsCode}
+          </tbody>
+        </table>
+
+        <input type='button' value='Новый товар' onClick={this.changeModeToCreateNewProduct} />
+
+        <ProductDescription
+          code={this.state.selectedProductCode}
+          name={this.state.selectedProductName}
+          price={this.state.selectedProductPrice}
+          url={this.state.selectedProductUrl}
+          quantity={this.state.selectedProductQuantity}
+          description={this.state.selectedProductDescription}
+          mode={this.state.productDescriptionMode}
+        />
+      </>
     );
   }
 }
-
-export default Store;

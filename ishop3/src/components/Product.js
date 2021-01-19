@@ -1,13 +1,33 @@
 import React, { Component } from 'react';
 
-class Product extends Component {
-  deleteProduct = () => {
-    this.props.changeSelectedProductCode(this.props.code);
-    this.props.filterArray(this.props.code);
+export default class Product extends Component {
+  deleteProduct = event => {
+    let deleteQuestion = confirm(`Вы действительно хотите удалить товар ${this.props.name}?`);
+
+    event.stopPropagation();
+    this.highlightProduct();
+    if (deleteQuestion) {
+      this.props.filterArray(this.props.code);
+      this.props.changeMode('hidden');
+    }
   };
 
   highlightProduct = () => {
-    this.props.changeSelectedProductCode(this.props.code);
+    this.props.changeSelectedProductProperties(
+      this.props.code,
+      this.props.name,
+      this.props.price,
+      this.props.url,
+      this.props.quantity,
+      this.props.description
+    );
+    this.props.changeMode('description');
+  };
+
+  changeProduct = event => {
+    event.stopPropagation();
+    this.highlightProduct();
+    this.props.changeMode('editor');
   };
 
   render() {
@@ -21,10 +41,9 @@ class Product extends Component {
         <td>{this.props.quantity}</td>
         <td>
           <input type='button' value='удалить' onClick={this.deleteProduct}></input>
+          <input type='button' value='изменить' onClick={this.changeProduct}></input>
         </td>
       </tr>
     );
   }
 }
-
-export default Product;
