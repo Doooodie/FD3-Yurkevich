@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 
 export default class Product extends Component {
   deleteProduct = event => {
-    let deleteQuestion = confirm(`Вы действительно хотите удалить товар ${this.props.name}?`);
-
     event.stopPropagation();
+    let deleteQuestion;
+    setTimeout(() => {
+      deleteQuestion = confirm(`Вы действительно хотите удалить товар ${this.props.name}?`);
+
+      if (deleteQuestion) {
+        this.props.filterArray(this.props.code);
+        this.props.changeMode('hidden');
+      }
+    }, 0);
     this.highlightProduct();
-    if (deleteQuestion) {
-      this.props.filterArray(this.props.code);
-      this.props.changeMode('hidden');
-    }
   };
 
   highlightProduct = () => {
