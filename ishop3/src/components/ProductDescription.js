@@ -27,7 +27,7 @@ export default class ProductDescription extends Component {
   }
 
   checkEmptyInput = event => {
-    if (event.target.value == '') {
+    if (event.target.value === '') {
       event.target.classList.add('red-border');
       this.setState({ isButtonDisabled: true });
     } else {
@@ -67,7 +67,7 @@ export default class ProductDescription extends Component {
   };
 
   render() {
-    if (this.props.mode == 'description') {
+    if (this.props.mode === 'description') {
       return (
         <div>
           <h1>{this.state.name}</h1>
@@ -75,7 +75,7 @@ export default class ProductDescription extends Component {
           <p>Price: {this.state.price}</p>
         </div>
       );
-    } else if (this.props.mode == 'editor') {
+    } else if (this.props.mode === 'editor') {
       return (
         <>
           <table className='editor-table'>
@@ -116,7 +116,7 @@ export default class ProductDescription extends Component {
           <input type='button' value='Отмена' onClick={this.changeModeToCreateNewProduct} />
         </>
       );
-    } else if (this.props.mode == 'newProductEditor') {
+    } else if (this.props.mode === 'newProductEditor') {
       return (
         <>
           <table className='editor-table'>
