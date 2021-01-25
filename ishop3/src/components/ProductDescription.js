@@ -89,7 +89,7 @@ export default class ProductDescription extends Component {
               <tr>
                 <td>Имя</td>
                 <td>
-                  <input type='text' data-type='name' defaultValue={this.state.name} onChange={this.handleChange} />
+                  <input type='text' data-type='name' value={this.state.name} onChange={this.handleChange} />
                 </td>
               </tr>
               <tr>
