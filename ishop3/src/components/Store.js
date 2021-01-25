@@ -65,13 +65,13 @@ export default class Store extends Component {
   };
 
   render() {
-    let tableHeader = [];
+    const tableHeader = [];
 
     for (let key in this.props.tableHeader) {
       tableHeader.push(<th key={key}>{this.props.tableHeader[key]}</th>);
     }
 
-    let productsCode = this.state.productsArray.map(item => (
+    const productsCode = this.state.productsArray.map(item => (
       <Product
         key={item.code}
         code={item.code}

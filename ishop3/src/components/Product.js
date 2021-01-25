@@ -35,7 +35,7 @@ export default class Product extends Component {
   };
 
   render() {
-    let backgroundColor = this.props.selectedProductCode === this.props.code ? 'aqua' : '';
+    const backgroundColor = this.props.selectedProductCode === this.props.code ? 'aqua' : '';
 
     return (
       <tr className={backgroundColor} onClick={this.highlightProduct}>
