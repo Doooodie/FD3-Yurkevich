@@ -44,8 +44,8 @@ export default class Product extends Component {
         <td>{this.props.url}</td>
         <td>{this.props.quantity}</td>
         <td>
-          <input type='button' value='удалить' onClick={this.deleteProduct}></input>
-          <input type='button' value='изменить' onClick={this.changeProduct}></input>
+          <input type='button' value='удалить' onClick={this.deleteProduct} />
+          <input type='button' value='изменить' onClick={this.changeProduct} />
         </td>
       </tr>
     );
