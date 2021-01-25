@@ -29,12 +29,12 @@ export default class Store extends Component {
   state = {
     productsArray: this.props.productsArray,
 
-    selectedProductCode: undefined,
-    selectedProductName: undefined,
-    selectedProductPrice: undefined,
-    selectedProductUrl: undefined,
-    selectedProductQuantity: undefined,
-    selectedProductDescription: undefined,
+    selectedProductCode: 0,
+    selectedProductName: '',
+    selectedProductPrice: 0,
+    selectedProductUrl: '',
+    selectedProductQuantity: 0,
+    selectedProductDescription: '',
 
     productDescriptionMode: 'hidden', //There are 4 modes: hidden, description, editor, newProductEditor
   };
