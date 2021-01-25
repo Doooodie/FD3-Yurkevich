@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../styles/Product.css';
 
 export default class Product extends Component {
   deleteProduct = event => {
@@ -34,10 +35,10 @@ export default class Product extends Component {
   };
 
   render() {
-    let backgroundColor = this.props.selectedProductCode === this.props.code ? { backgroundColor: 'aqua' } : undefined;
+    let backgroundColor = this.props.selectedProductCode === this.props.code ? 'aqua' : '';
 
     return (
-      <tr style={backgroundColor} onClick={this.highlightProduct}>
+      <tr className={backgroundColor} onClick={this.highlightProduct}>
         <td>{this.props.name}</td>
         <td>{this.props.price}</td>
         <td>{this.props.url}</td>
