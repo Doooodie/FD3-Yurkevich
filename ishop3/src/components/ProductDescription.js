@@ -2,44 +2,84 @@ import React, { Component } from 'react';
 import '../styles/ProductDescription.css';
 
 export default class ProductDescription extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      code: this.props.code,
-      name: this.props.name,
-      price: this.props.price,
-      url: this.props.url,
-      quantity: this.props.quantity,
-      description: this.props.description,
-    };
-  }
-
   hideDescription = () => {
-    this.props.changeMode('hidden');
-    this.props.changeSelectedProductProperties(0);
+    const { changeMode, changeSelectedProductProperties } = this.props;
+    
+    changeMode('hidden');
+    changeSelectedProductProperties(0);
   };
 
   handleChange = event => {
-    this.setState({ [event.target.dataset.type]: event.target.value });
+    const {
+      code,
+      name,
+      price,
+      url,
+      quantity,
+      description,
+      changeSelectedProductProperties,
+    } = this.props;
+
+    switch (event.target.dataset.type) {
+      case 'name':
+        changeSelectedProductProperties(
+          code,
+          event.target.value,
+          price,
+          url,
+          quantity,
+          description
+        );
+        break;
+      case 'price':
+        changeSelectedProductProperties(
+          code,
+          name,
+          event.target.value,
+          url,
+          quantity,
+          description
+        );
+        break;
+      case 'url':
+        changeSelectedProductProperties(
+          code,
+          name,
+          price,
+          event.target.value,
+          quantity,
+          description
+        );
+        break;
+      case 'quantity':
+        changeSelectedProductProperties(
+          code,
+          name,
+          price,
+          url,
+          event.target.value,
+          description
+        );
+        break;
+    }
   };
 
   render() {
+    const { code, name, price, url, quantity, mode, description } = this.props;
+
     const isButtonDisabled =
-      this.state.name === '' ||
-      this.state.price === '' ||
-      this.state.url === '' ||
-      this.state.quantity === '';
+      name === '' || price === '' || url === '' || quantity === '';
 
     return (
       <>
-        {this.props.mode === 'description' && (
+        {mode === 'description' && (
           <div>
-            <h1>{this.state.name}</h1>
-            <p>{this.state.description}</p>
-            <p>Price: {this.state.price}</p>
+            <h1>{name}</h1>
+            <p>{description}</p>
+            <p>Price: {price}</p>
           </div>
         )}
-        {this.props.mode === 'editor' && (
+        {mode === 'editor' && (
           <>
             <table className='editor-table'>
               <caption>
@@ -47,7 +87,7 @@ export default class ProductDescription extends Component {
               </caption>
               <tbody>
                 <tr>
-                  <td>ID: {this.state.code}</td>
+                  <td>ID: {code}</td>
                 </tr>
                 <tr>
                   <td>Имя</td>
@@ -55,8 +95,8 @@ export default class ProductDescription extends Component {
                     <input
                       type='text'
                       data-type='name'
-                      className={this.state.name === '' ? 'red-background' : ''}
-                      value={this.state.name}
+                      className={name === '' ? 'red-background' : ''}
+                      value={name}
                       onChange={this.handleChange}
                     />
                   </td>
@@ -67,8 +107,8 @@ export default class ProductDescription extends Component {
                     <input
                       type='text'
                       data-type='price'
-                      className={this.state.price === '' ? 'red-background' : ''}
-                      value={this.state.price}
+                      className={price === '' ? 'red-background' : ''}
+                      value={price}
                       onChange={this.handleChange}
                     />
                   </td>
@@ -79,8 +119,8 @@ export default class ProductDescription extends Component {
                     <input
                       type='text'
                       data-type='url'
-                      className={this.state.url === '' ? 'red-background' : ''}
-                      value={this.state.url}
+                      className={url === '' ? 'red-background' : ''}
+                      value={url}
                       onChange={this.handleChange}
                     />
                   </td>
@@ -91,8 +131,8 @@ export default class ProductDescription extends Component {
                     <input
                       type='text'
                       data-type='quantity'
-                      className={this.state.quantity === '' ? 'red-background' : ''}
-                      value={this.state.quantity}
+                      className={quantity === '' ? 'red-background' : ''}
+                      value={quantity}
                       onChange={this.handleChange}
                     />
                   </td>
@@ -112,7 +152,7 @@ export default class ProductDescription extends Component {
             />
           </>
         )}
-        {this.props.mode === 'newProductEditor' && (
+        {mode === 'newProductEditor' && (
           <>
             <table className='editor-table'>
               <caption>
@@ -120,7 +160,7 @@ export default class ProductDescription extends Component {
               </caption>
               <tbody>
                 <tr>
-                  <td>ID: {this.props.code}</td>
+                  <td>ID: {code}</td>
                 </tr>
                 <tr>
                   <td>Имя</td>

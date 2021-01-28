@@ -43,12 +43,12 @@ export default class Store extends Component {
     description
   ) => {
     this.setState({
-      selectedProductCode: code || 0,
+      selectedProductCode: code || '',
       selectedProductName: name || '',
-      selectedProductPrice: price || 0,
+      selectedProductPrice: price || '',
       selectedProductUrl: url || '',
-      selectedProductQuantity: quantity || 0,
-      selectedProductDescription: description || 0,
+      selectedProductQuantity: quantity || '',
+      selectedProductDescription: description || '',
     });
   };
 
@@ -69,7 +69,18 @@ export default class Store extends Component {
   };
 
   render() {
-    const productsCode = this.state.productsArray.map(item => (
+    const {
+      productsArray,
+      selectedProductCode,
+      selectedProductName,
+      selectedProductPrice,
+      selectedProductUrl,
+      selectedProductQuantity,
+      selectedProductDescription,
+      productDescriptionMode,
+    } = this.state;
+
+    const productsCode = productsArray.map(item => (
       <Product
         key={item.code}
         code={item.code}
@@ -78,8 +89,8 @@ export default class Store extends Component {
         url={item.url}
         quantity={item.quantity}
         description={item.description}
-        productDescriptionMode={this.state.productDescriptionMode}
-        selectedProductCode={this.state.selectedProductCode}
+        productDescriptionMode={productDescriptionMode}
+        selectedProductCode={selectedProductCode}
         changeSelectedProductProperties={this.changeSelectedProductProperties}
         filterArray={this.filterArray}
         changeMode={this.changeMode}
@@ -108,14 +119,14 @@ export default class Store extends Component {
         />
 
         <ProductDescription
-          key={this.state.selectedProductCode}
-          code={this.state.selectedProductCode}
-          name={this.state.selectedProductName}
-          price={this.state.selectedProductPrice}
-          url={this.state.selectedProductUrl}
-          quantity={this.state.selectedProductQuantity}
-          description={this.state.selectedProductDescription}
-          mode={this.state.productDescriptionMode}
+          key={selectedProductCode}
+          code={selectedProductCode}
+          name={selectedProductName}
+          price={selectedProductPrice}
+          url={selectedProductUrl}
+          quantity={selectedProductQuantity}
+          description={selectedProductDescription}
+          mode={productDescriptionMode}
           changeMode={this.changeMode}
           changeSelectedProductProperties={this.changeSelectedProductProperties}
         />
