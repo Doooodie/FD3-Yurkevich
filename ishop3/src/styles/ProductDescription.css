@@ -13,6 +13,7 @@
   width: 300px;
 }
 
-.red-border {
-  border-color: red;
+.red-background {
+  background-color: red;
+  color: white;
 }

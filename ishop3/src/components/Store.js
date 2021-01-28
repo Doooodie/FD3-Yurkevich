@@ -5,6 +5,22 @@ import Product from './Product.js';
 import ProductDescription from './ProductDescription.js';
 
 export default class Store extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      productsArray: require('../products.json'),
+
+      selectedProductCode: 0,
+      selectedProductName: '',
+      selectedProductPrice: 0,
+      selectedProductUrl: '',
+      selectedProductQuantity: 0,
+      selectedProductDescription: '',
+
+      productDescriptionMode: 'hidden', //There are 4 modes: hidden, description, editor, newProductEditor
+    };
+  }
+
   static defaultProps = {
     productsArray: [
       {
@@ -16,43 +32,31 @@ export default class Store extends Component {
         description: '',
       },
     ],
-
-    tableHeader: {
-      headerNameText: '',
-      headerPriceText: '',
-      headerUrlText: '',
-      headerQuantityText: '',
-      headerControlText: '',
-    },
   };
 
-  state = {
-    productsArray: this.props.productsArray,
-
-    selectedProductCode: 0,
-    selectedProductName: '',
-    selectedProductPrice: 0,
-    selectedProductUrl: '',
-    selectedProductQuantity: 0,
-    selectedProductDescription: '',
-
-    productDescriptionMode: 'hidden', //There are 4 modes: hidden, description, editor, newProductEditor
-  };
-
-  changeSelectedProductProperties = (code, name, price, url, quantity, description) => {
+  changeSelectedProductProperties = (
+    code,
+    name,
+    price,
+    url,
+    quantity,
+    description
+  ) => {
     this.setState({
-      selectedProductCode: code,
-      selectedProductName: name,
-      selectedProductPrice: price,
-      selectedProductUrl: url,
-      selectedProductQuantity: quantity,
-      selectedProductDescription: description,
+      selectedProductCode: code || 0,
+      selectedProductName: name || '',
+      selectedProductPrice: price || 0,
+      selectedProductUrl: url || '',
+      selectedProductQuantity: quantity || 0,
+      selectedProductDescription: description || 0,
     });
   };
 
   filterArray = code => {
     this.setState({
-      productsArray: this.state.productsArray.filter(item => item.code !== code),
+      productsArray: this.state.productsArray.filter(
+        item => item.code !== code
+      ),
     });
   };
 
@@ -65,12 +69,6 @@ export default class Store extends Component {
   };
 
   render() {
-    const tableHeader = [];
-
-    for (let key in this.props.tableHeader) {
-      tableHeader.push(<th key={key}>{this.props.tableHeader[key]}</th>);
-    }
-
     const productsCode = this.state.productsArray.map(item => (
       <Product
         key={item.code}
@@ -80,6 +78,7 @@ export default class Store extends Component {
         url={item.url}
         quantity={item.quantity}
         description={item.description}
+        productDescriptionMode={this.state.productDescriptionMode}
         selectedProductCode={this.state.selectedProductCode}
         changeSelectedProductProperties={this.changeSelectedProductProperties}
         filterArray={this.filterArray}
@@ -91,14 +90,25 @@ export default class Store extends Component {
       <>
         <table>
           <tbody>
-            <tr>{tableHeader}</tr>
+            <tr>
+              <th>Имя</th>
+              <th>Цена</th>
+              <th>URL</th>
+              <th>Количество</th>
+              <th>Контроль</th>
+            </tr>
             {productsCode}
           </tbody>
         </table>
 
-        <input type='button' value='Новый товар' onClick={this.changeModeToCreateNewProduct} />
+        <input
+          type='button'
+          value='Новый товар'
+          onClick={this.changeModeToCreateNewProduct}
+        />
 
         <ProductDescription
+          key={this.state.selectedProductCode}
           code={this.state.selectedProductCode}
           name={this.state.selectedProductName}
           price={this.state.selectedProductPrice}
@@ -106,6 +116,8 @@ export default class Store extends Component {
           quantity={this.state.selectedProductQuantity}
           description={this.state.selectedProductDescription}
           mode={this.state.productDescriptionMode}
+          changeMode={this.changeMode}
+          changeSelectedProductProperties={this.changeSelectedProductProperties}
         />
       </>
     );

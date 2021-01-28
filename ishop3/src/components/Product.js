@@ -4,16 +4,17 @@ import '../styles/Product.css';
 export default class Product extends Component {
   deleteProduct = event => {
     event.stopPropagation();
-    let deleteQuestion;
+    this.highlightProduct();
     setTimeout(() => {
-      deleteQuestion = confirm(`Вы действительно хотите удалить товар ${this.props.name}?`);
+      const deleteQuestion = confirm(
+        `Вы действительно хотите удалить товар ${this.props.name}?`
+      );
 
       if (deleteQuestion) {
         this.props.filterArray(this.props.code);
         this.props.changeMode('hidden');
       }
     }, 0);
-    this.highlightProduct();
   };
 
   highlightProduct = () => {
@@ -35,7 +36,10 @@ export default class Product extends Component {
   };
 
   render() {
-    const backgroundColor = this.props.selectedProductCode === this.props.code ? 'aqua' : '';
+    const backgroundColor =
+      this.props.selectedProductCode === this.props.code ? 'aqua' : '';
+
+    const isButtonDisabled = null;
 
     return (
       <tr className={backgroundColor} onClick={this.highlightProduct}>
