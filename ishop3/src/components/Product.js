@@ -28,9 +28,11 @@ export default class Product extends Component {
       quantity,
       description,
       changeMode,
+      changeLastProductCode,
+      changeSelectedProductProperties,
     } = this.props;
 
-    this.props.changeSelectedProductProperties(
+    changeSelectedProductProperties(
       code,
       name,
       price,
@@ -39,12 +41,15 @@ export default class Product extends Component {
       description
     );
     changeMode('description');
+    changeLastProductCode();
   };
 
   changeProduct = event => {
+    const { changeMode, changeLastProductCode } = this.props;
     event.stopPropagation();
     this.highlightProduct();
-    this.props.changeMode('editor');
+    changeMode('editor');
+    changeLastProductCode();
   };
 
   render() {
@@ -54,22 +59,49 @@ export default class Product extends Component {
       price,
       url,
       quantity,
+      productDescriptionMode,
       selectedProductCode,
+      isProductChanged,
     } = this.props;
 
     const backgroundColor = selectedProductCode === code ? 'aqua' : '';
+    let isChangeButtonDisabled = false;
+    let isDeleteButtonDisabled = false;
+    let isProductClickable = this.highlightProduct;
 
-    const isButtonDisabled = null;
+    if (
+      productDescriptionMode === 'editor' ||
+      productDescriptionMode === 'newProductEditor'
+    ) {
+      isDeleteButtonDisabled = true;
+    }
+
+    if (isProductChanged || productDescriptionMode === 'newProductEditor') {
+      isChangeButtonDisabled = true;
+    }
+
+    (isProductChanged || productDescriptionMode === 'newProductEditor') &&
+      (isProductClickable = null);
 
     return (
-      <tr className={backgroundColor} onClick={this.highlightProduct}>
+      <tr className={backgroundColor} onClick={isProductClickable}>
         <td>{name}</td>
         <td>{price}</td>
         <td>{url}</td>
         <td>{quantity}</td>
         <td>
-          <input type='button' value='удалить' onClick={this.deleteProduct} />
-          <input type='button' value='изменить' onClick={this.changeProduct} />
+          <input
+            type='button'
+            disabled={isDeleteButtonDisabled}
+            value='удалить'
+            onClick={this.deleteProduct}
+          />
+          <input
+            type='button'
+            disabled={isChangeButtonDisabled}
+            value='изменить'
+            onClick={this.changeProduct}
+          />
         </td>
       </tr>
     );

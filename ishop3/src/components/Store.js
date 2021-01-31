@@ -10,29 +10,23 @@ export default class Store extends Component {
     this.state = {
       productsArray: require('../products.json'),
 
-      selectedProductCode: 0,
+      selectedProductCode: '',
       selectedProductName: '',
-      selectedProductPrice: 0,
+      selectedProductPrice: '',
       selectedProductUrl: '',
-      selectedProductQuantity: 0,
+      selectedProductQuantity: '',
       selectedProductDescription: '',
 
+      editedProductName: '',
+      editedProductPrice: '',
+      editedProductUrl: '',
+      editedProductQuantity: '',
+
       productDescriptionMode: 'hidden', //There are 4 modes: hidden, description, editor, newProductEditor
+      isProductChanged: false,
+      lastProductCode: 0,
     };
   }
-
-  static defaultProps = {
-    productsArray: [
-      {
-        code: 0,
-        name: '',
-        price: 0,
-        url: '',
-        quantity: 0,
-        description: '',
-      },
-    ],
-  };
 
   changeSelectedProductProperties = (
     code,
@@ -49,14 +43,27 @@ export default class Store extends Component {
       selectedProductUrl: url || '',
       selectedProductQuantity: quantity || '',
       selectedProductDescription: description || '',
+      editedProductName: name || '',
+      editedProductPrice: price || '',
+      editedProductUrl: url || '',
+      editedProductQuantity: quantity || '',
+    });
+  };
+
+  changeEditedProductProperties = (name, price, url, quantity) => {
+    this.setState({
+      editedProductName: name || '',
+      editedProductPrice: price || '',
+      editedProductUrl: url || '',
+      editedProductQuantity: quantity || '',
     });
   };
 
   filterArray = code => {
+    const { productsArray } = this.state;
+
     this.setState({
-      productsArray: this.state.productsArray.filter(
-        item => item.code !== code
-      ),
+      productsArray: productsArray.filter(item => item.code !== code),
     });
   };
 
@@ -64,8 +71,63 @@ export default class Store extends Component {
     this.setState({ productDescriptionMode: mode });
   };
 
+  changeLastProductCode = () => {
+    const { productsArray } = this.state;
+    this.setState({ lastProductCode: productsArray.length + 1 });
+  };
+
   changeModeToCreateNewProduct = () => {
     this.setState({ productDescriptionMode: 'newProductEditor' });
+    this.changeSelectedProductProperties(0);
+    this.changeLastProductCode();
+  };
+
+  checkIfProductChanged = state => {
+    this.setState({ isProductChanged: state });
+  };
+
+  saveProduct = () => {
+    const {
+      productDescriptionMode,
+      productsArray,
+      editedProductName,
+      editedProductPrice,
+      editedProductUrl,
+      editedProductQuantity,
+      lastProductCode,
+      selectedProductCode,
+    } = this.state;
+
+    let descriptionText = 'Ipsum';
+
+    if (Math.random() > 0.5) {
+      descriptionText = 'Lorem';
+    }
+
+    if (productDescriptionMode === 'editor') {
+      productsArray.find(product => {
+        if (product.code === selectedProductCode) {
+          product.name = editedProductName;
+          product.price = editedProductPrice;
+          product.url = editedProductUrl;
+          product.quantity = editedProductQuantity;
+        }
+      });
+      this.setState({
+        productDescriptionMode: 'hidden',
+        isProductChanged: false,
+      });
+    } else {
+      productsArray.push({
+        code: lastProductCode,
+        name: editedProductName,
+        price: editedProductPrice,
+        url: editedProductUrl,
+        quantity: editedProductQuantity,
+        description: `${descriptionText}${lastProductCode}`,
+      });
+      this.setState({ productDescriptionMode: 'hidden' });
+    }
   };
 
   render() {
@@ -78,6 +140,12 @@ export default class Store extends Component {
       selectedProductQuantity,
       selectedProductDescription,
       productDescriptionMode,
+      editedProductName,
+      editedProductPrice,
+      editedProductUrl,
+      editedProductQuantity,
+      isProductChanged,
+      lastProductCode,
     } = this.state;
 
     const productsCode = productsArray.map(item => (
@@ -91,11 +159,22 @@ export default class Store extends Component {
         description={item.description}
         productDescriptionMode={productDescriptionMode}
         selectedProductCode={selectedProductCode}
+        isProductChanged={isProductChanged}
         changeSelectedProductProperties={this.changeSelectedProductProperties}
         filterArray={this.filterArray}
         changeMode={this.changeMode}
+        changeLastProductCode={this.changeLastProductCode}
       />
     ));
+
+    let isNewButtonDisabled = false;
+
+    if (
+      productDescriptionMode === 'editor' ||
+      productDescriptionMode === 'newProductEditor'
+    ) {
+      isNewButtonDisabled = true;
+    }
 
     return (
       <>
@@ -115,6 +194,7 @@ export default class Store extends Component {
         <input
           type='button'
           value='Новый товар'
+          disabled={isNewButtonDisabled}
           onClick={this.changeModeToCreateNewProduct}
         />
 
@@ -126,9 +206,17 @@ export default class Store extends Component {
           url={selectedProductUrl}
           quantity={selectedProductQuantity}
           description={selectedProductDescription}
+          editedProductName={editedProductName}
+          editedProductPrice={editedProductPrice}
+          editedProductUrl={editedProductUrl}
+          editedProductQuantity={editedProductQuantity}
           mode={productDescriptionMode}
+          lastProductCode={lastProductCode}
+          checkIfProductChanged={this.checkIfProductChanged}
           changeMode={this.changeMode}
+          changeEditedProductProperties={this.changeEditedProductProperties}
           changeSelectedProductProperties={this.changeSelectedProductProperties}
+          saveProduct={this.saveProduct}
         />
       </>
     );

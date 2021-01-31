@@ -2,73 +2,120 @@ import React, { Component } from 'react';
 import '../styles/ProductDescription.css';
 
 export default class ProductDescription extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isProductChanged: false,
+    };
+  }
+
   hideDescription = () => {
-    const { changeMode, changeSelectedProductProperties } = this.props;
-    
+    const {
+      changeMode,
+      checkIfProductChanged,
+      changeSelectedProductProperties,
+    } = this.props;
+
     changeMode('hidden');
     changeSelectedProductProperties(0);
+    checkIfProductChanged(false);
   };
 
   handleChange = event => {
     const {
-      code,
       name,
       price,
       url,
       quantity,
-      description,
-      changeSelectedProductProperties,
+      mode,
+      editedProductName,
+      editedProductPrice,
+      editedProductUrl,
+      editedProductQuantity,
+      changeEditedProductProperties,
+      checkIfProductChanged,
     } = this.props;
 
     switch (event.target.dataset.type) {
       case 'name':
-        changeSelectedProductProperties(
-          code,
+        if (mode === 'editor') {
+          event.target.value !== name
+            ? checkIfProductChanged(true)
+            : checkIfProductChanged(false);
+        }
+
+        changeEditedProductProperties(
           event.target.value,
-          price,
-          url,
-          quantity,
-          description
+          editedProductPrice,
+          editedProductUrl,
+          editedProductQuantity
         );
         break;
       case 'price':
-        changeSelectedProductProperties(
-          code,
-          name,
+        if (mode === 'editor') {
+          +event.target.value !== price
+            ? checkIfProductChanged(true)
+            : checkIfProductChanged(false);
+        }
+
+        changeEditedProductProperties(
+          editedProductName,
           event.target.value,
-          url,
-          quantity,
-          description
+          editedProductUrl,
+          editedProductQuantity
         );
         break;
       case 'url':
-        changeSelectedProductProperties(
-          code,
-          name,
-          price,
+        if (mode === 'editor') {
+          event.target.value !== url
+            ? checkIfProductChanged(true)
+            : checkIfProductChanged(false);
+        }
+
+        changeEditedProductProperties(
+          editedProductName,
+          editedProductPrice,
           event.target.value,
-          quantity,
-          description
+          editedProductQuantity
         );
         break;
       case 'quantity':
-        changeSelectedProductProperties(
-          code,
-          name,
-          price,
-          url,
-          event.target.value,
-          description
+        if (mode === 'editor') {
+          +event.target.value !== quantity
+            ? checkIfProductChanged(true)
+            : checkIfProductChanged(false);
+        }
+
+        changeEditedProductProperties(
+          editedProductName,
+          editedProductPrice,
+          editedProductUrl,
+          event.target.value
         );
         break;
     }
   };
 
   render() {
-    const { code, name, price, url, quantity, mode, description } = this.props;
+    const {
+      code,
+      name,
+      price,
+      mode,
+      description,
+      editedProductName,
+      editedProductPrice,
+      editedProductUrl,
+      editedProductQuantity,
+      saveProduct,
+      lastProductCode,
+    } = this.props;
 
     const isButtonDisabled =
-      name === '' || price === '' || url === '' || quantity === '';
+      editedProductName === '' ||
+      editedProductPrice === '' ||
+      editedProductUrl === '' ||
+      editedProductQuantity === '';
 
     return (
       <>
@@ -79,15 +126,21 @@ export default class ProductDescription extends Component {
             <p>Price: {price}</p>
           </div>
         )}
-        {mode === 'editor' && (
+        {(mode === 'editor' || mode === 'newProductEditor') && (
           <>
             <table className='editor-table'>
               <caption>
-                <h2>Изменить существующий товар</h2>
+                <h2>
+                  {mode === 'newProductEditor'
+                    ? 'Добавить новый товар'
+                    : 'Изменить существующий товар'}
+                </h2>
               </caption>
               <tbody>
                 <tr>
-                  <td>ID: {code}</td>
+                  <td>
+                    ID: {mode === 'newProductEditor' ? lastProductCode : code}
+                  </td>
                 </tr>
                 <tr>
                   <td>Имя</td>
@@ -95,8 +148,10 @@ export default class ProductDescription extends Component {
                     <input
                       type='text'
                       data-type='name'
-                      className={name === '' ? 'red-background' : ''}
-                      value={name}
+                      className={
+                        editedProductName === '' ? 'red-background' : ''
+                      }
+                      value={editedProductName}
                       onChange={this.handleChange}
                     />
                   </td>
@@ -107,8 +162,10 @@ export default class ProductDescription extends Component {
                     <input
                       type='text'
                       data-type='price'
-                      className={price === '' ? 'red-background' : ''}
-                      value={price}
+                      className={
+                        editedProductPrice === '' ? 'red-background' : ''
+                      }
+                      value={editedProductPrice}
                       onChange={this.handleChange}
                     />
                   </td>
@@ -119,8 +176,10 @@ export default class ProductDescription extends Component {
                     <input
                       type='text'
                       data-type='url'
-                      className={url === '' ? 'red-background' : ''}
-                      value={url}
+                      className={
+                        editedProductUrl === '' ? 'red-background' : ''
+                      }
+                      value={editedProductUrl}
                       onChange={this.handleChange}
                     />
                   </td>
@@ -131,8 +190,10 @@ export default class ProductDescription extends Component {
                     <input
                       type='text'
                       data-type='quantity'
-                      className={quantity === '' ? 'red-background' : ''}
-                      value={quantity}
+                      className={
+                        editedProductQuantity === '' ? 'red-background' : ''
+                      }
+                      value={editedProductQuantity}
                       onChange={this.handleChange}
                     />
                   </td>
@@ -143,60 +204,12 @@ export default class ProductDescription extends Component {
               type='button'
               disabled={isButtonDisabled}
               value='Сохранить'
-              onClick={this.logText}
+              onClick={saveProduct}
             />
             <input
               type='button'
               value='Отмена'
               onClick={this.hideDescription}
-            />
-          </>
-        )}
-        {mode === 'newProductEditor' && (
-          <>
-            <table className='editor-table'>
-              <caption>
-                <h2>Добавить новый товар</h2>
-              </caption>
-              <tbody>
-                <tr>
-                  <td>ID: {code}</td>
-                </tr>
-                <tr>
-                  <td>Имя</td>
-                  <td>
-                    <input type='text' />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Цена</td>
-                  <td>
-                    <input type='text' />
-                  </td>
-                </tr>
-                <tr>
-                  <td>URL</td>
-                  <td>
-                    <input type='text' />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Количество</td>
-                  <td>
-                    <input type='text' />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <input
-              type='button'
-              value='Сохранить'
-              onClick={this.changeModeToCreateNewProduct}
-            />
-            <input
-              type='button'
-              value='Отмена'
-              onClick={this.changeModeToCreateNewProduct}
             />
           </>
         )}
