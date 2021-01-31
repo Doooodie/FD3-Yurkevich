@@ -3,7 +3,7 @@ import '../styles/Product.css';
 
 export default class Product extends Component {
   deleteProduct = event => {
-    const { name, code, filterArray, changeMode } = this.props;
+    const { name, code, removeProduct, changeMode } = this.props;
 
     event.stopPropagation();
     this.highlightProduct();
@@ -13,7 +13,7 @@ export default class Product extends Component {
       );
 
       if (deleteQuestion) {
-        filterArray(code);
+        removeProduct(code);
         changeMode('hidden');
       }
     }, 0);

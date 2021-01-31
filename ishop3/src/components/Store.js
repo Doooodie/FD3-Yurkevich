@@ -162,7 +162,7 @@ export default class Store extends Component {
         selectedProductCode={selectedProductCode}
         isProductChanged={isProductChanged}
         changeSelectedProductProperties={this.changeSelectedProductProperties}
-        filterArray={this.filterArray}
+        removeProduct={this.filterArray}
         changeMode={this.changeMode}
         changeLastProductCode={this.changeLastProductCode}
       />
