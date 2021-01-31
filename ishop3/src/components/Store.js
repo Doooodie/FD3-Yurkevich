@@ -73,7 +73,8 @@ export default class Store extends Component {
 
   changeLastProductCode = () => {
     const { productsArray } = this.state;
-    this.setState({ lastProductCode: productsArray.length + 1 });
+    const lastProduct = productsArray[productsArray.length - 1];
+    this.setState({ lastProductCode: lastProduct.code + 1 });
   };
 
   changeModeToCreateNewProduct = () => {
