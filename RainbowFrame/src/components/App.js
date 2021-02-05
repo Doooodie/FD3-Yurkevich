@@ -11,4 +11,4 @@ const colors = [
   'purple',
 ];
 
-export default () => <RainbowFrame colors={colors}>Hello!</RainbowFrame>;
+export default () => <RainbowFrame colors={colors}>Привет!</RainbowFrame>;
